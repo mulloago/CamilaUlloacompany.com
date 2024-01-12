@@ -1,0 +1,498 @@
+import excel "/Users/mulloago/OneDrive - purdue.edu/Cluster analysis/STATA/Ariana do/datset.xlsx", sheet("Sheet0") firstrow
+
+*LOW INPUT VEGETABLES DO FILE 
+*DEPENDENT VARIABLES 
+*generate variables
+gen bio=Q24_27
+gen cf=Q24_1
+gen energy=Q24_21
+gen environment=Q24_26
+gen fertilizer=Q24_17
+gen miles=Q24_29
+gen ghg=Q24_20
+gen water=Q24_16
+gen pollinator=Q24_23
+
+*understand variable
+sum bio cf energy environment fertilizer miles ghg water pollinator, detail
+
+* pairwise correlation
+corr bio cf energy environment fertilizer miles ghg water pollinator
+
+*plots
+hist bio, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of biodegradable packaging) ytitle(N. Observations)
+hist cf, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low carbon footprint) ytitle(N. Observations)
+hist energy, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low energy consumption) ytitle(N. Observations)
+hist environment, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low environmental impact) ytitle(N. Observations)
+hist fertilizer, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low fertilizer usage) ytitle(N. Observations)
+hist miles, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low food miles) ytitle(N. Observations)
+hist ghg, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low greenhouse gas emissions) ytitle(N. Observations)
+hist water, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of low water usage) ytitle(N. Observations)
+hist pollinator, frequency normal fcolor(black) graphregion(color(white))  lcolor(white) xtitle(Importance of pollinator friendly) ytitle(N. Observations)
+
+*INDEPENDENT VARIABLES
+gen age1=18 if Q4==2
+replace age1=19 if Q4==3
+replace age1=20 if Q4==4
+replace age1=21 if Q4==5
+replace age1=22 if Q4==6
+replace age1=23 if Q4==7
+replace age1=24 if Q4==8
+replace age1=25 if Q4==9
+replace age1=26 if Q4==10
+replace age1=27 if Q4==11
+replace age1=28 if Q4==12
+replace age1=29 if Q4==13
+replace age1=30 if Q4==14
+replace age1=31 if Q4==15
+replace age1=32 if Q4==16
+replace age1=33 if Q4==17
+replace age1=34 if Q4==18
+replace age1=35 if Q4==19
+replace age1=36 if Q4==20
+replace age1=37 if Q4==21
+replace age1=38 if Q4==22
+replace age1=39 if Q4==23
+replace age1=40 if Q4==24
+replace age1=41 if Q4==25
+replace age1=42 if Q4==26
+replace age1=43 if Q4==27
+replace age1=44 if Q4==28
+replace age1=45 if Q4==29
+replace age1=46 if Q4==30
+replace age1=47 if Q4==31
+replace age1=48 if Q4==32
+replace age1=49 if Q4==33
+replace age1=50 if Q4==34
+replace age1=51 if Q4==35
+replace age1=52 if Q4==36
+replace age1=53 if Q4==37
+replace age1=54 if Q4==38
+replace age1=55 if Q4==39
+replace age1=56 if Q4==40
+replace age1=57 if Q4==41
+replace age1=58 if Q4==42
+replace age1=59 if Q4==43
+replace age1=60 if Q4==44
+replace age1=61 if Q4==45
+replace age1=62 if Q4==46
+replace age1=63 if Q4==47
+replace age1=64 if Q4==48
+replace age1=65 if Q4==49
+replace age1=66 if Q4==50
+replace age1=67 if Q4==51
+replace age1=68 if Q4==52
+replace age1=69 if Q4==53
+replace age1=70 if Q4==54
+replace age1=71 if Q4==55
+replace age1=72 if Q4==56
+	**The problem with this one is that the survey asked only until 72+ years and they are the largest group of people of the same age
+	
+*GENDER
+gen female=1 if Q5==6
+replace female=0 if Q5==5
+
+*RACE
+gen white=1 if Q38==1
+replace white=0 if Q38!=1
+
+*ETHNICITY
+gen latino=1 if Q82==1
+replace latino=0 if Q82!=1
+
+*INCOME
+gen lowincome=1 if Q6<=5
+replace lowincome=0 if Q6>5
+
+gen medincome=1 if Q6==6|Q6==7
+replace medincome=0 if Q6<6|Q6>7
+
+gen highincome=1 if Q6>=8
+replace highincome=0 if Q6<8
+
+*MARITAL STATUS
+gen single=1 if Q35==1
+replace single=0 if Q35!=1
+
+*adults living in the household
+gen adultsHH=Q36
+
+*children living in the household
+gen childrenHH=Q37
+
+*education
+gen education=1 if Q40==6|Q40==8
+replace education=2 if Q40==5|Q40==7
+replace education=3 if Q40==4
+replace education=4 if Q40==2|Q40==3
+replace education=5 if Q40==1
+*1=graduate degree
+*2=bachellor degree/professional degree
+*3=2 year college
+*4=high school (GED) and some college
+*5=less than high school
+
+gen college=1 if education<=2
+replace college=0 if education>2
+
+	*(OPTIONAL)
+	*gen edu=1 if education==1|education==2
+	*replace edu=2 if education==3|education==4
+	*replace edu=3 if education==5
+	*1=bachellor degree or above
+	*2=highschool and some college or 2 years college
+	*3= less than highschool	
+
+*area where they live
+gen urban=1 if Q41==1 
+replace urban=0 if Q41==2|Q41==3
+
+gen suburban=1 if Q41==2
+replace suburban=0 if Q41==1|Q41==3
+
+gen rural=1 if Q41==3
+replace rural=0 if Q41==1|Q41==2
+
+*CONSUMPTION
+gen consumption=1 if Q7==1
+replace consumption=2 if Q7==5
+replace consumption=3 if Q7==6
+replace consumption=4 if Q7==7
+replace consumption=5 if Q7==8
+replace consumption=6 if Q7==9
+replace consumption=7 if Q7==10
+replace consumption=8 if Q7==11
+replace consumption=9 if Q7==12
+replace consumption=10 if Q7==13
+replace consumption=11 if Q7==14
+replace consumption=12 if Q7==15
+replace consumption=13 if Q7==16
+replace consumption=14 if Q7==17
+replace consumption=15 if Q7==18
+replace consumption=16 if Q7==19
+replace consumption=17 if Q7==20
+replace consumption=18 if Q7==21
+replace consumption=19 if Q7==22
+replace consumption=20 if Q7==23
+
+	*CLEANING OUTLIERS IN CONSUMPTION 
+	winsor consumption, p(.05) gen (consumption_win)
+
+*REGIONS OF THE US 
+
+gen west=1 if Q42==49|Q42==38|Q42==13|Q42==27|Q42==52|Q42==5|Q42==29|Q42==46|Q42==6|Q42==2|Q42==12
+replace west=0 if Q42==3|Q42==32|Q42==45|Q42==37|Q42==8|Q42==9|Q42==1|Q42==4|Q42==10|Q42==11|Q42==18|Q42==19|Q42==21|Q42==25|Q42==34|Q42==42|Q42==44|Q42==48|Q42==50|Q42==14|Q42==15|Q42==16|Q42==17|Q42==23|Q42==24|Q42==26|Q42==28|Q42==35|Q42==36|Q42==43|Q42==51|Q42==7|Q42==20|Q42==22|Q42==30|Q42==31|Q42==33|Q42==39|Q42==41|Q42==47
+
+gen southwest=1 if Q42==3|Q42==32|Q42==45|Q42==37
+replace southwest=0 if Q42==49|Q42==38|Q42==13|Q42==27|Q42==52|Q42==5|Q42==29|Q42==46|Q42==6|Q42==2|Q42==12|Q42==8|Q42==9|Q42==1|Q42==4|Q42==10|Q42==11|Q42==18|Q42==19|Q42==21|Q42==25|Q42==34|Q42==42|Q42==44|Q42==48|Q42==50|Q42==14|Q42==15|Q42==16|Q42==17|Q42==23|Q42==24|Q42==26|Q42==28|Q42==35|Q42==36|Q42==43|Q42==51|Q42==7|Q42==20|Q42==22|Q42==30|Q42==31|Q42==33|Q42==39|Q42==41|Q42==47
+
+gen southeast=1 if  Q42==8|Q42==9|Q42==1|Q42==4|Q42==10|Q42==11|Q42==18|Q42==19|Q42==21|Q42==25|Q42==34|Q42==42|Q42==44|Q42==48|Q42==50
+replace southeast=0 if Q42==49|Q42==38|Q42==13|Q42==27|Q42==52|Q42==5|Q42==29|Q42==46|Q42==6|Q42==2|Q42==12|Q42==3|Q42==32|Q42==45|Q42==37| Q42==14|Q42==15|Q42==16|Q42==17|Q42==23|Q42==24|Q42==26|Q42==28|Q42==35|Q42==36|Q42==43|Q42==51|Q42==7|Q42==20|Q42==22|Q42==30|Q42==31|Q42==33|Q42==39|Q42==41|Q42==47
+
+gen midwest=1 if Q42==14|Q42==15|Q42==16|Q42==17|Q42==23|Q42==24|Q42==26|Q42==28|Q42==35|Q42==36|Q42==43|Q42==51
+replace midwest=0 if Q42==49|Q42==38|Q42==13|Q42==27|Q42==52|Q42==5|Q42==29|Q42==46|Q42==6|Q42==2|Q42==12|Q42==3|Q42==32|Q42==45|Q42==37|Q42==8|Q42==9|Q42==1|Q42==4|Q42==10|Q42==11|Q42==18|Q42==19|Q42==21|Q42==25|Q42==34|Q42==42|Q42==44|Q42==48|Q42==50|Q42==7|Q42==20|Q42==22|Q42==30|Q42==31|Q42==33|Q42==39|Q42==41|Q42==47
+
+gen northeast=1 if Q42==7|Q42==20|Q42==22|Q42==30|Q42==31|Q42==33|Q42==39|Q42==41|Q42==47
+replace northeast=0 if Q42==49|Q42==38|Q42==13|Q42==27|Q42==52|Q42==5|Q42==29|Q42==46|Q42==6|Q42==2|Q42==12|Q42==3|Q42==32|Q42==45|Q42==37|Q42==8|Q42==9|Q42==1|Q42==4|Q42==10|Q42==11|Q42==18|Q42==19|Q42==21|Q42==25|Q42==34|Q42==42|Q42==44|Q42==48|Q42==50|Q42==14|Q42==15|Q42==16|Q42==17|Q42==23|Q42==24|Q42==26|Q42==28|Q42==35|Q42==36|Q42==43|Q42==51  
+
+*markets where they shop fresh vegetables
+	
+	replace Q8 = 14 in 6
+	replace Q8 = 14 in 105
+	replace Q8 = 11 in 121
+	replace Q8 = 4 in 164
+	replace Q8 = 14 in 200
+	replace Q8 = 11 in 265
+	replace Q8 = 7 in 429
+	replace Q8 = 12 in 567
+	replace Q8 = 14 in 709
+	replace Q8 = 14 in 772
+	replace Q8 = 7 in 948
+	replace Q8 = 14 in 995
+	replace Q8 = 14 in 1019
+	replace Q8 = 14 in 1078
+	replace Q8 = 14 in 1122
+	replace Q8 = 11 in 1196
+	replace Q8 = 7 in 1228 
+	replace Q8 = 7 in 1254
+	replace Q8 = 14 in 1283
+	replace Q8 = 14 in 1289
+	replace Q8 = 7 in 1313
+	replace Q8 = 11 in 1402
+	replace Q8 = 14 in 1403
+	replace Q8 = 12 in 1598
+	replace Q8 = 3 in 1607
+	replace Q8 = 14 in 1695
+	replace Q8 = 14 in 1792
+	replace Q8 = 14 in 1875
+	replace Q8 = 11 in 1935
+	replace Q8 = 14 in 1968
+	replace Q8 = 14 in 1995
+	replace Q8 = 14 in 2057
+	replace Q8 = 14 in 2077
+	
+
+gen DTC=1 if Q8==1|Q8==9|Q8==6
+replace DTC=0 if Q8==2|Q8==3|Q8==4|Q8==5|Q8==7|Q8==10|Q8==11|Q8==12|Q8==14
+	*includes at-farm or road side stand, CSA or community supported agriculture, and farmers markets 
+gen largechain=1 if Q8==14|Q8==2
+replace largechain=0 if Q8==1|Q8==3|Q8==4|Q8==5|Q8==6|Q8==7|Q8==9|Q8==10|Q8==11|Q8==12
+	*includes large chain store, and warehouse/club house 
+gen retail=1 if Q8==12|Q8==7|Q8==5|Q8==4
+replace retail=0 if Q8==1|Q8==2|Q8==3|Q8==6|Q8==9|Q8==10|Q8==11|Q8==14
+	*includes: local grocery store, discount gorcery store, ethnic grecery store, independent grocery store 
+gen online=1 if Q8==3|Q8==11
+replace online=0 if Q8==1|Q8==2|Q8==4|Q8==5|Q8==6|Q8==7|Q8==9|Q8==10|Q8==12|Q8==14
+*includes: meal delivery service and online grocery delivery
+
+*EXPENDITURE on fresh whole vegetables
+gen expenditure=Q9_4
+
+*EXPENDITURE BY NUMBER OF PEOPLE in the HH
+gen expenditure2= expenditure/(adultsHH+childrenHH)
+sum expenditure2
+	*CLEANING OUTLIERS IN EXPENDITURE2 
+	winsor expenditure2, p(.1) gen (expenditure_win)
+	sum expenditure_win
+	graph box expenditure_win
+	
+*Transportation method 
+	*Sustainable= Bicycle, share ride with someone else, walking, bus, train 
+	*Not sustainable= ride sharing (uber, lyft), taxi, car 
+*gen bycicle= regexs(0) if regexm(Q13, "2")	
+*gen bus= regexs(0) if regexm(Q13, "6")
+*encode bycicle, generate(bycicle_n)
+
+*Market characteristics
+*Price (cheaper vegetables)
+gen price=Q14_2 
+gen seasonality=Q14_11
+gen locallygrown=Q14_8
+gen organicsection=Q14_9
+gen familyfarm=Q14_10
+
+*Environmental variables when buying FVs
+gen sustainability=1 if Q31_2==6
+replace sustainability=0 if Q31_2!=6
+
+gen buyorganic=1 if Q31_7==6
+replace buyorganic=0 if Q31_7!=6
+
+gen waste=1 if Q31_8==6
+replace waste=0 if Q31_8!=6
+
+*TRUST in people
+gen trust=1 if Q29==4
+replace trust=0 if Q29!=4
+
+*CLUSTER ANALYSIS
+*NEW ENVIRONMENTAL FOOTPRINT CLAIMS
+global variables bio cf energy fertilizer miles ghg water pollinator
+
+*clustering procedure = Wards linkage
+cluster wardslinkage bio cf energy fertilizer miles ghg water pollinator, measure(L2squared) name(clusterx)
+
+*dendogram
+cluster dendrogram clusterx, cutnumber(10) showcount
+
+*number of clusters
+*Duda-Hart
+cluster stop clusterx, rule(duda) groups(1/10)
+
+
+*Calinski Harabasz pseudo F-index
+cluster stop clusterx, rule(calinski) groups(2/11)
+do "/Users/mulloago/OneDrive - purdue.edu/Cluster analysis/STATA/Ariana do/Order probit/chomega.ado" do chomega
+*do "/Users/torres2/Dropbox/#1Pubs_research/#In process/5.lowinput/paper/stata/chomega.ado" do chomega
+
+
+*The number of clusters suggested by the calinski criterion was 3, therefore we continue our analysis with this number of clusters 
+		
+*summary of variables
+cluster generate cluster_x = groups(3), name(clusterx) ties(error)
+
+gen CLUSTER_X = 0
+replace CLUSTER_X = 1 if cluster_x == 3
+replace CLUSTER_X = 2 if cluster_x == 2
+replace CLUSTER_X = 3 if cluster_x == 1
+	*describe and profile the clusters 
+	tabulate CLUSTER_X, missing
+	*centroid of the cluster
+	tabstat bio cf energy fertilizer miles ghg water pollinator, statistics( mean ) by(CLUSTER_X)
+	
+*k-means based in the Ward's linkage
+cluster kmeans bio cf energy  fertilizer miles ghg water pollinator, k(3) measure(L2squared) name(kmeansx) start(group(CLUSTER_X)) 
+*overlap in the two clusters 
+tabulate CLUSTER_X kmeansx
+
+
+*ANOVA
+gen cluster2=kmeansx 
+sum $variables
+by cluster2, sort:sum $variables
+
+anova bio cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova cf cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova energy cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova fertilizer cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova miles cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova ghg cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova water cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+anova pollinator cluster2
+	pwcompare cluster2, asobserved effects sort mcompare(tukey) level(99) group
+
+*Independent variables 
+
+sum age1 female white lowincome medincome highincome latino single adultsHH childrenHH college urban suburban rural west southwest southeast midwest northeast consumption largechain retail online expenditure price seasonality locallygrown organicsection familyfarm sustainability buyorganic waste trust 
+
+by cluster2, sort:sum age1 female white lowincome medincome highincome latino single adultsHH childrenHH college urban suburban rural west southwest southeast midwest northeast consumption DTC largechain retail online expenditure price seasonality locallygrown organicsection familyfarm sustainability buyorganic waste  
+
+
+anova age1 cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova female cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova white cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova lowincome cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova medincome cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova highincome cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova latino cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova single cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova adultsHH cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova childrenHH cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova college cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova urban cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova suburban cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova rural cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova west cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova southwest cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova southeast cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova midwest cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova northeast cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova consumption cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova DTC cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova largechain cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova retail cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova online cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova expenditure cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova price cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group 
+
+anova seasonality cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova locallygrown cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova organicsection cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova familyfarm cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova sustainability cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova buyorganic cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova waste cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+anova trust cluster2
+pwcompare cluster2, asobserved effects sort mcompare (tukey) level(99) group
+
+
+*PROBIT
+oprobit cluster2 age1 female white medincome highincome latino single childrenHH adultsHH college urban suburban west southwest southeast midwest consumption DTC largechain online expenditure price seasonality locallygrown organicsection familyfarm sustainability buyorganic waste
+
+	margins, dydx(*) atmeans predict(outcome(1))
+	margins, dydx(*) atmeans predict(outcome(2))
+	margins, dydx(*) atmeans predict(outcome(3))
+
+
+* Calculate the count and percentage of ages between 18 to 34
+gen age_18to34 = (age1 >= 18 & age1 <= 34)
+tabulate age_18to34, gen(count_18to34)
+
+* Calculate the count and percentage of ages between 35 to 54
+gen age_35to44 = (age1 >= 35 & age1 <= 44)
+tabulate age_35to44, gen(count_35to44)
+
+* Calculate the count and percentage of ages between 55 to 64
+gen age_45to64 = (age1 >=45 & age1 <= 64)
+tabulate age_45to64, gen(count_45to64)
+
+* Calculate the count and percentage of ages 65 and older
+gen age_65plus = (age1 >= 65)
+tabulate age_65plus, gen(count_65plus)
+
+gen pct_65plus = count_65plus / _N * 100
+
+* Display the percentages
+list pct_18to34 pct_35to54 pct_55to64 pct_65plus
+
+
+
+
+
+
+
+
+
+
